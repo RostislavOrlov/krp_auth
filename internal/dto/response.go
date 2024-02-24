@@ -18,4 +18,10 @@ type RegisterResponse struct {
 	MiddleName string `json:"middle_name"`
 	Email      string `json:"email"`
 	Password   string `json:"password"`
+	Role       string `json:"role"`
+}
+
+type UpdateAccessTokenResponse struct {
+	AccessTokenString  string `json:"access_token_string"`
+	RefreshTokenString string `json:"refresh_token_string"`
 }

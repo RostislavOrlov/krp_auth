@@ -26,36 +26,35 @@ func (repo *UserRepository) Auth(user *dto.AuthRequest) (*entities.User, error) 
 	}
 
 	defer row.Close()
-	var usrDb *entities.User
-	err = row.Scan(&usrDb.Id, &usrDb.LastName, &usrDb.FirstName, &usrDb.MiddleName, &usrDb.Email, &usrDb.Password)
-	if err != nil {
-		log.Fatalf("Unable to scan row: %v\n", err)
+	var usrDb entities.User
+	for row.Next() {
+		err = row.Scan(&usrDb.Id, &usrDb.LastName, &usrDb.FirstName, &usrDb.MiddleName, &usrDb.Email, &usrDb.Password, &usrDb.Role)
+		if err != nil {
+			log.Fatalf("Unable to scan row: %v\n", err)
+		}
 	}
 
-	return usrDb, nil
+	return &usrDb, nil
 }
 
-func (repo *UserRepository) Register(user *dto.RegisterRequest) (*entities.User, error) {
-	q := "INSERT INTO users(lastname, firstname, middlename, email, password) " +
-		"VALUES($1, $2, $3, $4, $5) RETURNING *"
+func (repo *UserRepository) Register(user *dto.RegisterRequest, password string) (*entities.User, error) {
+	q := "INSERT INTO users (lastname, firstname, middlename, email, password, role)" + //(lastname, firstname, middlename, email, password, role)
+		"VALUES($1, $2, $3, $4, $5, $6) RETURNING *"
 
 	row, err := repo.db.Query(context.Background(), q,
 		user.LastName, user.FirstName, user.MiddleName,
-		user.Email, user.Password)
+		user.Email, password, user.Role)
 	if err != nil && err.Error() != "no row in result set" {
 		return nil, err
 	}
 
 	defer row.Close()
 	var usrDb entities.User
-	err = row.Scan(&usrDb.Id, &usrDb.LastName, &usrDb.FirstName, &usrDb.MiddleName, &usrDb.Email, &usrDb.Password)
-	if err != nil {
-		log.Fatalf("Unable to scan row: %v\n", err)
+	for row.Next() {
+		err = row.Scan(&usrDb.Id, &usrDb.LastName, &usrDb.FirstName, &usrDb.MiddleName, &usrDb.Email, &usrDb.Password, &usrDb.Role)
+		if err != nil {
+			log.Fatalf("Unable to scan row: %v\n", err)
+		}
 	}
-
 	return &usrDb, nil
-}
-
-func (repo *UserRepository) UpdateRefreshToken() {
-
 }

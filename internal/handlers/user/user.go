@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"krp_project/internal/dto"
@@ -18,7 +19,13 @@ func (h *UserHandler) InitRoutes() *gin.Engine {
 
 	router.POST("/auth", h.Auth)
 	router.POST("/register", h.Register)
+	router.POST("/update_access_token", h.UpdateAccessToken)
 
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"http://localhost:8081"},
+		AllowMethods: []string{"GET", "POST"},
+		AllowHeaders: []string{"Origin"},
+	}))
 	return router
 }
 
@@ -63,16 +70,43 @@ func (h *UserHandler) Register(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "register request error", "text": ok})
 		return
 	}
-	userResp, err := h.userService.Register(&req)
+	usr, err := h.userService.Register(&req)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "register service error", "text": err.Error()})
 		return
 	}
-	logrus.Debug(userResp)
-	c.JSON(http.StatusOK, gin.H{"status": "ok", "data": userResp})
+	logrus.Debug(usr)
+
+	resp := dto.RegisterResponse{
+		Id:         usr.Id,
+		LastName:   usr.LastName,
+		FirstName:  usr.FirstName,
+		MiddleName: usr.MiddleName,
+		Email:      usr.Email,
+		Password:   usr.Password,
+		Role:       usr.Role,
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "data": resp})
 }
 
-// TODO: потом
 func (h *UserHandler) UpdateAccessToken(c *gin.Context) {
+	req, ok := request.GetRequest[dto.UpdateAccessTokenRequest](c)
+	logrus.Debug(req)
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "update access token request error", "text": ok})
+		return
+	}
+	tokens, err := h.userService.UpdateAccessToken(&req)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "update access token service error", "text": err.Error()})
+		return
+	}
+	logrus.Debug(tokens)
 
+	resp := dto.UpdateAccessTokenResponse{
+		AccessTokenString:  tokens[0].TokenString,
+		RefreshTokenString: tokens[1].TokenString,
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "data": resp})
 }
