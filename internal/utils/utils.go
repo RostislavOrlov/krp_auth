@@ -1,9 +1,9 @@
 package utils
 
 import (
+	"github.com/IlyaZayats/auth/internal/dto"
+	"github.com/IlyaZayats/auth/internal/entities"
 	"github.com/golang-jwt/jwt"
-	"krp_project/internal/dto"
-	"krp_project/internal/entities"
 	"strconv"
 	"time"
 )

@@ -2,10 +2,10 @@ package services
 
 import (
 	"errors"
-	"krp_project/internal/dto"
-	"krp_project/internal/entities"
-	"krp_project/internal/repositories"
-	"krp_project/internal/utils"
+	"github.com/IlyaZayats/auth/internal/dto"
+	"github.com/IlyaZayats/auth/internal/entities"
+	"github.com/IlyaZayats/auth/internal/repositories"
+	"github.com/IlyaZayats/auth/internal/utils"
 )
 
 type UserService struct {

@@ -2,9 +2,9 @@ package repositories
 
 import (
 	"context"
+	"github.com/IlyaZayats/auth/internal/dto"
+	"github.com/IlyaZayats/auth/internal/entities"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"krp_project/internal/dto"
-	"krp_project/internal/entities"
 	"log"
 )
 

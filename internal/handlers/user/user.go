@@ -1,12 +1,12 @@
 package user
 
 import (
+	"github.com/IlyaZayats/auth/internal/dto"
+	"github.com/IlyaZayats/auth/internal/handlers/request"
+	"github.com/IlyaZayats/auth/internal/services"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"krp_project/internal/dto"
-	"krp_project/internal/handlers/request"
-	"krp_project/internal/services"
 	"net/http"
 )
 
