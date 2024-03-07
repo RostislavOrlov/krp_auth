@@ -5,3 +5,8 @@ type Token struct {
 	ExpiresAt   int64  `json:"expires_at"`
 	IssuedAt    int64  `json:"issued_at"`
 }
+
+type Tokens struct {
+	AccessTokenString  string
+	RefreshTokenString string
+}

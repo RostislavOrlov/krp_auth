@@ -37,21 +37,20 @@ func (srv *UserService) Auth(user *dto.AuthRequest) (*entities.User, []*entities
 		return nil, nil, errors.New("incorrect password")
 	}
 
-	userTokens, _ := utils.UpdateTokens(usr)
+	userTokens, _ := utils.CreateTokens(usr)
 
-	//srv.repo.UpdateRefreshToken?
 	return usr, userTokens, nil
 }
 
-func (srv *UserService) UpdateAccessToken(req *dto.UpdateAccessTokenRequest) ([]*entities.Token, error) {
-	usr := &entities.User{
-		Id:         req.Id,
-		LastName:   req.LastName,
-		FirstName:  req.FirstName,
-		MiddleName: req.MiddleName,
-		Email:      req.Email,
-		Role:       req.Role,
-	}
+func (srv *UserService) UpdateAccessToken(tokens *entities.Tokens) ([]*entities.Token, error) {
+	//usr := &entities.User{
+	//	Id:         req.Id,
+	//	LastName:   req.LastName,
+	//	FirstName:  req.FirstName,
+	//	MiddleName: req.MiddleName,
+	//	Email:      req.Email,
+	//	Role:       req.Role,
+	//}
 
-	return utils.UpdateTokens(usr)
+	return utils.UpdateTokens(tokens)
 }
