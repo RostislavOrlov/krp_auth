@@ -15,12 +15,12 @@ type AuthRequest struct {
 }
 
 type UpdateAccessTokenRequest struct {
-	Id                 int    `json:"id"`
-	LastName           string `json:"last_name"`
-	FirstName          string `json:"first_name"`
-	MiddleName         string `json:"middle_name"`
-	Email              string `json:"email"`
-	Role               string `json:"role"`
-	AccessTokenString  string `json:"access_token_string"`
-	RefreshTokenString string `json:"refresh_token_string"`
+	//Id         int    `json:"id"`
+	//LastName   string `json:"last_name"`
+	//FirstName  string `json:"first_name"`
+	//MiddleName string `json:"middle_name"`
+	//Email      string `json:"email"`
+	//Role       string `json:"role"`
+	//AccessTokenString  string `json:"access_token_string"`
+	//RefreshTokenString string `json:"refresh_token_string"`
 }

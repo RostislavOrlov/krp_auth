@@ -10,7 +10,6 @@ type AuthResponse struct {
 	RefreshTokenExpiresAt int64  `json:"refresh_token_expires_at"`
 	RefreshTokenIssuedAt  int64  `json:"refresh_token_issued_at"`
 }
-
 type RegisterResponse struct {
 	Id         int    `json:"id"`
 	LastName   string `json:"last_name"`
@@ -20,7 +19,6 @@ type RegisterResponse struct {
 	Password   string `json:"password"`
 	Role       string `json:"role"`
 }
-
 type UpdateAccessTokenResponse struct {
 	AccessTokenString  string `json:"access_token_string"`
 	RefreshTokenString string `json:"refresh_token_string"`

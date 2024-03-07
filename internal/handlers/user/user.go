@@ -5,7 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"krp_project/internal/dto"
+	"krp_project/internal/entities"
 	"krp_project/internal/handlers/request"
+	"krp_project/internal/middleware"
 	"krp_project/internal/services"
 	"net/http"
 )
@@ -19,18 +21,22 @@ func (h *UserHandler) InitRoutes() *gin.Engine {
 
 	router.POST("/auth", h.Auth)
 	router.POST("/register", h.Register)
-	router.POST("/update_access_token", h.UpdateAccessToken)
+	router.POST("/update_access_token",
+		middleware.AuthMiddleware(), h.UpdateAccessToken)
 
 	//router.Use(cors.New(cors.Config{
-	//	AllowOrigins: []string{"http://localhost:8081"},
-	//	AllowMethods: []string{"GET", "POST"},
-	//	AllowHeaders: []string{"Origin"},
+	//	AllowOrigins:     []string{"http://localhost:8081"},
+	//	AllowMethods:     []string{"GET", "POST"},
+	//	AllowHeaders:     []string{"Origin"},
+	//	AllowCredentials: true,
 	//}))
 
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
+	config.AllowCredentials = true
+	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
+	config.AllowHeaders = []string{"Access-Control-Allow-Headers", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Accept", "Origin", "Cache-Control", "X-Requested-With"}
 	router.Use(cors.New(config))
-
 	return router
 }
 
@@ -95,13 +101,24 @@ func (h *UserHandler) Register(c *gin.Context) {
 }
 
 func (h *UserHandler) UpdateAccessToken(c *gin.Context) {
-	req, ok := request.GetRequest[dto.UpdateAccessTokenRequest](c)
-	logrus.Debug(req)
-	if !ok {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "update access token request error", "text": ok})
+	//req, ok := request.GetRequest[dto.UpdateAccessTokenRequest](c)
+	accessToken := c.MustGet("access_token").(string)
+	refreshToken, err := c.Cookie("refresh_token")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "error refresh token parsing from cookie", "text": err.Error()})
 		return
 	}
-	tokens, err := h.userService.UpdateAccessToken(&req)
+
+	//logrus.Debug(req)
+	//if !ok {
+	//	c.JSON(http.StatusBadRequest, gin.H{"error": "update access token request error", "text": ok})
+	//	return
+	//}
+
+	tokens, err := h.userService.UpdateAccessToken(&entities.Tokens{
+		AccessTokenString:  accessToken,
+		RefreshTokenString: refreshToken,
+	})
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "update access token service error", "text": err.Error()})
 		return
