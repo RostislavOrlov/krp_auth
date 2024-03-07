@@ -21,11 +21,16 @@ func (h *UserHandler) InitRoutes() *gin.Engine {
 	router.POST("/register", h.Register)
 	router.POST("/update_access_token", h.UpdateAccessToken)
 
-	router.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"http://localhost:8081"},
-		AllowMethods: []string{"GET", "POST"},
-		AllowHeaders: []string{"Origin"},
-	}))
+	//router.Use(cors.New(cors.Config{
+	//	AllowOrigins: []string{"http://localhost:8081"},
+	//	AllowMethods: []string{"GET", "POST"},
+	//	AllowHeaders: []string{"Origin"},
+	//}))
+
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	router.Use(cors.New(config))
+
 	return router
 }
 
