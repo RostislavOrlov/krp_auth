@@ -23,6 +23,7 @@ func (h *UserHandler) InitRoutes() *gin.Engine {
 	router.POST("/register", h.Register)
 	router.POST("/update_access_token",
 		middleware.AuthMiddleware(), h.UpdateAccessToken)
+	router.GET("/test", h.Test)
 
 	//router.Use(cors.New(cors.Config{
 	//	AllowOrigins:     []string{"http://localhost:8081"},
@@ -45,6 +46,10 @@ func NewUserHandler(srv *services.UserService) (*UserHandler, error) {
 		userService: srv,
 	}
 	return h, nil
+}
+
+func (h *UserHandler) Test(c *gin.Context) {
+	c.JSON(http.StatusOK, "krp")
 }
 
 func (h *UserHandler) Auth(c *gin.Context) {
