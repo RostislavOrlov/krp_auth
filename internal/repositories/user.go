@@ -19,7 +19,7 @@ func NewUserRepository(db *pgxpool.Pool) (*UserRepository, error) {
 }
 
 func (repo *UserRepository) Auth(user *dto.AuthRequest) (*entities.User, error) {
-	q := "SELECT * FROM Users WHERE email=$1 AND password=$2"
+	q := "SELECT * FROM Users WHERE email=$1 AND pswd=$2"
 	row, err := repo.db.Query(context.Background(), q, user.Email, user.Password)
 	if err != nil && err.Error() != "no row in result set" {
 		return nil, err

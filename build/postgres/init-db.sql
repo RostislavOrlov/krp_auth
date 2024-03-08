@@ -10,3 +10,5 @@ create table Users(
     snils varchar,
     birthday date
 );
+
+insert into users values ('adminov', 'admin', 'adminovich', 'admin@mail.ru', 'admin', '1234 567890', '12345678', '12345678', '2024-03-08');
