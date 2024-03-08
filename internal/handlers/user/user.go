@@ -14,16 +14,16 @@ import (
 
 type UserHandler struct {
 	userService *services.UserService
+	engine      *gin.Engine
 }
 
-func (h *UserHandler) InitRoutes() *gin.Engine {
-	router := gin.New()
+func (h *UserHandler) InitRoutes() {
 
-	router.POST("/auth", h.Auth)
-	router.POST("/register", h.Register)
-	router.POST("/update_access_token",
+	h.engine.POST("/auth", h.Auth)
+	h.engine.POST("/register", h.Register)
+	h.engine.POST("/update_access_token",
 		middleware.AuthMiddleware(), h.UpdateAccessToken)
-	router.GET("/test", h.Test)
+	h.engine.GET("/test", h.Test)
 
 	//router.Use(cors.New(cors.Config{
 	//	AllowOrigins:     []string{"http://localhost:8081"},
@@ -37,14 +37,15 @@ func (h *UserHandler) InitRoutes() *gin.Engine {
 	config.AllowCredentials = true
 	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
 	config.AllowHeaders = []string{"Access-Control-Allow-Headers", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Accept", "Origin", "Cache-Control", "X-Requested-With"}
-	router.Use(cors.New(config))
-	return router
+	h.engine.Use(cors.New(config))
 }
 
-func NewUserHandler(srv *services.UserService) (*UserHandler, error) {
+func NewUserHandler(srv *services.UserService, engine *gin.Engine) (*UserHandler, error) {
 	h := &UserHandler{
 		userService: srv,
+		engine:      engine,
 	}
+	h.InitRoutes()
 	return h, nil
 }
 
