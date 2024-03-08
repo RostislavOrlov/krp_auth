@@ -5,6 +5,7 @@ import (
 	"github.com/IlyaZayats/auth/internal/dto"
 	"github.com/IlyaZayats/auth/internal/entities"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/sirupsen/logrus"
 	"log"
 )
 
@@ -35,6 +36,8 @@ func (repo *UserRepository) Auth(user *dto.AuthRequest) (*entities.User, error) 
 			log.Fatalf("Unable to scan row: %v\n", err)
 		}
 	}
+
+	logrus.Info("пользователь из базы с логином ", usrDb.Role, ": ", usrDb)
 
 	return &usrDb, nil
 }
