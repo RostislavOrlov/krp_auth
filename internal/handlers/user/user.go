@@ -112,8 +112,11 @@ func (h *UserHandler) Register(c *gin.Context) {
 
 func (h *UserHandler) UpdateAccessToken(c *gin.Context) {
 	//req, ok := request.GetRequest[dto.UpdateAccessTokenRequest](c)
+	logrus.Info("старт обработки запроса на обновление токена")
 	accessToken := c.MustGet("access_token").(string)
 	refreshToken, err := c.Cookie("refresh_token")
+	logrus.Info("access token: ", accessToken)
+	logrus.Info("refresh token: ", refreshToken)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error refresh token parsing from cookie", "text": err.Error()})
 		return

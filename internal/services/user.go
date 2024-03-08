@@ -6,7 +6,6 @@ import (
 	"github.com/IlyaZayats/auth/internal/entities"
 	"github.com/IlyaZayats/auth/internal/repositories"
 	"github.com/IlyaZayats/auth/internal/utils"
-	"github.com/sirupsen/logrus"
 )
 
 type UserService struct {
@@ -34,7 +33,7 @@ func (srv *UserService) Auth(user *dto.AuthRequest) (*entities.User, []*entities
 	if err != nil {
 		return nil, nil, errors.New("error user authentication")
 	}
-	logrus.Info("введенный пароль:", user.Password, ", правильный пароль:", usr.Password)
+	//logrus.Info("введенный пароль:", user.Password, ", правильный пароль:", usr.Password)
 	if user.Password != usr.Password {
 		return nil, nil, errors.New("incorrect password")
 	}

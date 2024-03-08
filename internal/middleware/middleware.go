@@ -3,13 +3,16 @@ package middleware
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		logrus.Info("старт работы middleware")
 		authHeader := c.GetHeader("Authorization")
+		logrus.Info("authorization header: ", authHeader)
 		if authHeader == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error": "Missing Authorization header",
