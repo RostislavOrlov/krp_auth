@@ -24,6 +24,7 @@ func main() {
 
 	ctx := context.Background()
 
+	//pgDB, err := db.NewPostgresPool("postgres://postgres:12345@localhost:5432/krp_auth")
 	pgDB, err := db.NewPostgresPool("postgres://krp_auth:krp_auth@postgres_auth:5432/krp_auth")
 	if err != nil {
 		logrus.Panicf("unable get postgres pool: %v", err)
