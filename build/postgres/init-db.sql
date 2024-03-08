@@ -1,4 +1,4 @@
-create table Users(
+create table users(
     user_id integer NOT NULL PRIMARY KEY,
     lastname varchar,
     firstname varchar,
