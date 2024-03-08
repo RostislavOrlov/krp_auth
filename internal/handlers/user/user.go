@@ -25,19 +25,19 @@ func (h *UserHandler) InitRoutes() {
 		middleware.AuthMiddleware(), h.UpdateAccessToken)
 	h.engine.GET("/test", h.Test)
 
-	//router.Use(cors.New(cors.Config{
-	//	AllowOrigins:     []string{"http://localhost:8081"},
-	//	AllowMethods:     []string{"GET", "POST"},
-	//	AllowHeaders:     []string{"Origin"},
-	//	AllowCredentials: true,
-	//}))
+	h.engine.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:8081"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
+		AllowHeaders:     []string{"Access-Control-Allow-Headers", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Accept", "Origin", "Cache-Control", "X-Requested-With"},
+		AllowCredentials: true,
+	}))
 
-	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
-	config.AllowCredentials = true
-	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
-	config.AllowHeaders = []string{"Access-Control-Allow-Headers", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Accept", "Origin", "Cache-Control", "X-Requested-With"}
-	h.engine.Use(cors.New(config))
+	//config := cors.DefaultConfig()
+	//config.AllowAllOrigins = true
+	//config.AllowCredentials = true
+	//config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
+	//config.AllowHeaders = []string{"Access-Control-Allow-Headers", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Accept", "Origin", "Cache-Control", "X-Requested-With"}
+	//h.engine.Use(cors.New(config))
 }
 
 func NewUserHandler(srv *services.UserService, engine *gin.Engine) (*UserHandler, error) {
@@ -76,7 +76,11 @@ func (h *UserHandler) Auth(c *gin.Context) {
 		RefreshTokenExpiresAt: userTokens[1].ExpiresAt,
 		RefreshTokenIssuedAt:  userTokens[1].IssuedAt,
 	}
+
 	logrus.Debug(resp)
+
+	c.SetCookie("refresh_token", resp.RefreshTokenString, 60*60*60*60*24, "/", "localhost", false, true)
+
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "data": resp})
 }
 
@@ -115,6 +119,7 @@ func (h *UserHandler) UpdateAccessToken(c *gin.Context) {
 	logrus.Info("старт обработки запроса на обновление токена")
 	accessToken := c.MustGet("access_token").(string)
 	refreshToken, err := c.Cookie("refresh_token")
+	//test, err := c.Cookie()
 	logrus.Info("access token: ", accessToken)
 	logrus.Info("refresh token: ", refreshToken)
 	if err != nil {
