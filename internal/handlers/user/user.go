@@ -21,7 +21,7 @@ func (h *UserHandler) InitRoutes() {
 
 	h.engine.POST("/auth", h.Auth)
 	h.engine.POST("/register", h.Register)
-	h.engine.POST("/update_access_token",
+	h.engine.GET("/update_access_token",
 		middleware.AuthMiddleware(), h.UpdateAccessToken)
 	h.engine.GET("/test", h.Test)
 
