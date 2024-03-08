@@ -1,5 +1,5 @@
 create table users(
-    user_id integer NOT NULL PRIMARY KEY,
+    user_id serial NOT NULL PRIMARY KEY,
     lastname varchar,
     firstname varchar,
     middlename varchar,
@@ -8,7 +8,8 @@ create table users(
     passport varchar,
     inn varchar, 
     snils varchar,
-    birthday date
+    birthday varchar,
+    role varchar
 );
 
-insert into users values ('adminov', 'admin', 'adminovich', 'admin@mail.ru', 'admin', '1234 567890', '12345678', '12345678', '2024-03-08');
+insert into users values ('adminov', 'admin', 'adminovich', 'admin@mail.ru', 'admin', '1234 567890', '12345678', '12345678', '2024-03-08', 'ADMIN');

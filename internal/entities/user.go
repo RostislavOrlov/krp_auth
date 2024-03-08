@@ -7,5 +7,9 @@ type User struct {
 	MiddleName string `json:"middle_name"`
 	Email      string `json:"email"`
 	Password   string `json:"password"`
+	Passport   string `json:"passport"`
+	Inn        string `json:"inn"`
+	Snils      string `json:"snils"`
+	Birthday   string `json:"birthday"`
 	Role       string `json:"role"`
 }

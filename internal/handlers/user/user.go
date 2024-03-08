@@ -101,6 +101,10 @@ func (h *UserHandler) Register(c *gin.Context) {
 		MiddleName: usr.MiddleName,
 		Email:      usr.Email,
 		Password:   usr.Password,
+		Passport:   usr.Passport,
+		Inn:        usr.Inn,
+		Snils:      usr.Snils,
+		Birthday:   usr.Birthday,
 		Role:       usr.Role,
 	}
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "data": resp})
